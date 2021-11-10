@@ -58,7 +58,7 @@ function buttonClick(e) {
     let clickedButton = e.target.textContent;
     let result = playRound(clickedButton);
 
-    textInterface.innerHTML = result;
+    textInterface.textContent = result;
 
     if (result.includes("win")) {
         wins++;
@@ -73,9 +73,9 @@ function buttonClick(e) {
 }
 
 function updateScore() {
-    winCountBox.innerHTML = wins;
-    lossCountBox.innerHTML = losses;
-    tieCountBox.innerHTML = ties;
+    winCountBox.textContent = wins;
+    lossCountBox.textContent = losses;
+    tieCountBox.textContent = ties;
 
     if (wins + losses + ties > 4) {
         endGame();
@@ -100,7 +100,7 @@ function endGame() {
         losses = 0;
         ties = 0;
         updateScore();
-        textInterface.innerHTML = "Play a game of Rock Paper Scissors against me. Best to 5!";
+        textInterface.textContent = "Play a game of Rock Paper Scissors against me. Best to 5!";
     }
     else {
         rockButton.removeEventListener("click", buttonClick);
