@@ -5,8 +5,8 @@ function computerPlay() {
     return computerSelection;
 }
 
-
-function playRound(playerSelection, computerSelection) {
+function playRound(playerSelection) {
+    computerSelection = computerPlay();
     playerSelection = playerSelection.toLowerCase();
     playerSelection = playerSelection[0].toUpperCase() + playerSelection.slice(1);
 
@@ -36,34 +36,75 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
+let textInterface = document.querySelector(".text-interface");
+let winCountBox = document.querySelector(".wins>div");
+let lossCountBox = document.querySelector(".losses>div");
+let tieCountBox = document.querySelector(".ties>div");
 
-function game() {
-    let wins = 0;
-    let losses = 0;
+let rockButton = document.querySelector("button.rock");
+let paperButton = document.querySelector("button.paper");
+let scissorsButton = document.querySelector("button.scissors");
 
-    console.log("Hello! Play a game of Rock Paper Scissors against me. Best of 5!")
+rockButton.addEventListener("click", buttonClick);
+paperButton.addEventListener("click", buttonClick);
+scissorsButton.addEventListener("click", buttonClick);
 
-    for (let i = 0; i < 5; i++) {
-        let result = playRound(prompt("Your move?"), computerPlay());
-        console.log(result);
+let wins = 0;
+let losses = 0;
+let ties = 0;
 
-        if (result.includes("win")) {
-            wins++;
-        }
-        if (result.includes("lose")) {
-            losses++;
-        }
+
+function buttonClick(e) {
+    let clickedButton = e.target.textContent;
+    let result = playRound(clickedButton);
+
+    textInterface.innerHTML = result;
+
+    if (result.includes("win")) {
+        wins++;
     }
-
-    if (wins < losses) {
-        console.log("You've lost the game!");
-    }
-    else if (wins > losses) {
-        console.log("You've won the game!")
+    else if (result.includes("lose")) {
+        losses++;
     }
     else {
-        console.log("It's a tie!")
+        ties++;
     }
+    updateScore();
 }
 
-game();
+function updateScore() {
+    winCountBox.innerHTML = wins;
+    lossCountBox.innerHTML = losses;
+    tieCountBox.innerHTML = ties;
+
+    if (wins + losses + ties > 4) {
+        endGame();
+    }
+    
+}
+
+function endGame() {
+    let replayChoice;
+    if (wins > losses) {
+        replayChoice = confirm("You win! Play again?");
+    }
+    else if (losses > wins) {
+        replayChoice = confirm("You lose! Play again?");
+    }
+    else {
+        replayChoice = confirm("It's a tie! Play again?");
+    }
+
+    if (replayChoice == true) {
+        wins = 0;
+        losses = 0;
+        ties = 0;
+        updateScore();
+        textInterface.innerHTML = "Play a game of Rock Paper Scissors against me. Best to 5!";
+    }
+    else {
+        rockButton.removeEventListener("click", buttonClick);
+        paperButton.removeEventListener("click", buttonClick);
+        scissorsButton.removeEventListener("click", buttonClick);
+    }
+}
